@@ -1,4 +1,5 @@
 # Rotten_Tomatoes_Netflix_Chrome_Extension
+![Extension Ex](logo.png)
 
 ## Description
 A chrome extension that adds Rotten Tomatoes's critic and audience reviews to the Netflix browser.
