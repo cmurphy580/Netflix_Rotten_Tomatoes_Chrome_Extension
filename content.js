@@ -45,7 +45,8 @@ const pullListItem = async(data, list) => {
     console.log(ratings);
     return ratings;
   } else {
-    var modifiedTitle = data.title.includes("and") ? data.title.replace("and", "&") : null;
+    var modifiedTitle = data.title.includes("and") ? data.title.replace("and", "&") : data.title;
+    modifiedTitle = modifiedTitle.includes("&#39;") ? modifiedTitle.replace("&#39;", "'") : modifiedTitle;
     for (var i = 0; i < list.length; i++) {
       var year = data.type === "movie" ? list[i].releaseYear : list[i].startYear;
       if ((list[i].name === data.title || list[i].name === modifiedTitle) && Math.abs(+year - data.year) <= 1) {
@@ -58,8 +59,9 @@ const pullListItem = async(data, list) => {
   return false;
 }
 
-const searchRT = async(data, unmodifiedTitle) => {
-  var title = data.title.includes(" ") ? data.title.replace(/\s/g, "%20") : data.title;
+const searchRT = async(data) => {
+  var title = data.title.includes("&#39;") ? data.title.replace("&#39;", "'") : data.title;
+  title = title.includes(" ") ? title.replace(/\s/g, "%20") : title;
   var search_url = `https://www.rottentomatoes.com/search?search=${title}`;
   console.log("search url: ");
   console.log(search_url);
@@ -68,7 +70,7 @@ const searchRT = async(data, unmodifiedTitle) => {
     var data_type = data.type === "movie" ? "movie" : "tv";
     console.log(`${data_type}s-json`);
     var list = JSON.parse(response.getElementById(`${data_type}s-json`).innerHTML).items;
-    var ratings = await pullListItem(data, list); //  LINE 47
+    var ratings = await pullListItem(data, list);
     return ratings;
   }
   return false;
@@ -160,7 +162,7 @@ const getRTData = async(data) => {
         console.log(url);
         if (rTData === false) {
           // search for content with a RT id
-          rTData = await searchRT(data, unmodifiedTitle);
+          rTData = await searchRT(data);
           console.log(`4th check: ${rTData}`);
           return rTData === false || rTData === undefined ? { "title": data.title, "imdb": data.imbd } : rTData;
         } else {
@@ -168,7 +170,7 @@ const getRTData = async(data) => {
         }
       } else {
         if (rTData === false) {
-          rTData = await searchRT(data, unmodifiedTitle);
+          rTData = await searchRT(data);
           console.log(`4th check: ${rTData}`);
           return rTData === false || rTData === undefined ? { "title": data.title, "imdb": data.imbd } : rTData;
         } else {
@@ -177,7 +179,7 @@ const getRTData = async(data) => {
       }
     } else {
       if (rTData === false) {
-        rTData = await searchRT(data, unmodifiedTitle);
+        rTData = await searchRT(data);
         console.log(`4th check: ${rTData}`);
         return rTData === false || rTData === undefined ? { "title": data.title, "imdb": data.imbd } : rTData;
       } else {
