@@ -125,7 +125,7 @@ const formatTitle = (data) => {
   title = title.includes(",") ? title.replace(", ", "_") : title;
   title = title.includes("&") ? title.replace(" & ", "_") : title;
   title = title.includes("%") ? title.replace("%", "_") : title;
-  title = title.includes("-") ? title.replace("-", "_") : title;
+  title = title.includes("-") ? title.replace(/-/g, "_") : title;
   title = title.includes("'") ? title.replace(/'/g, "_") : title;
   title = title.includes("&#39;") ? title.replace("&#39;", "") : title;
   title = title.includes("marvel") ? title.substring(8) : title;
