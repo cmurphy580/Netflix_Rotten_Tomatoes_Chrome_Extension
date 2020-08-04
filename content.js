@@ -233,8 +233,9 @@ const appendRTButton = async(id, buttons) => {
       // get Netflix Data
       const netflixData = await getNetflixData(id);
       // get Rotten Tomatoes Data
-      const rTData = await getRTData(netflixData);
-      if (rTData.hasOwnProperty("critic")) {
+      var rTData;
+      if (netflixData !== undefined) rTData = await getRTData(netflixData);
+      if (rTData !== undefined && rTData.hasOwnProperty("critic")) {
         console.log(rTData);
         displayRTData(this, rTData, buttonPosition);
       } else {
